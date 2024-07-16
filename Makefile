@@ -5,7 +5,7 @@ endif
 
 DB_M_NAME ?= init
 GOOSE_DRIVER=postgres
-GOOSE_DBSTRING="host=${POSTGRES_HOST} user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} dbname=${POSTGRES_DATABASE} port=${POSTGRES_PORT} sslmode=disable"
+GOOSE_DBSTRING="host=${DB_HOST} user=${DB_USER} password=${DB_PASS} dbname=${DB_NAME} port=${DB_PORT} sslmode=disable"
 
 run:
 	@go run src/*.go
