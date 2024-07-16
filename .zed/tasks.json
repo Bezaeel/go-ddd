@@ -1,0 +1,30 @@
+[
+  {
+    "label": "Go: tidy",
+    "command": "go mod tidy",
+    "use_new_terminal": false
+  },
+  {
+    "label": "Go: test a function",
+    "command": "go test - run $ZED_SYMBOL $ZED_FILE",
+    "use_new_terminal": false
+  },
+  {
+    "label": "Go: add json to struct",
+    "command": "gomodifytags -file $ZED_FILE -struct $ZED_SYMBOL -add-tags json -w",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true
+  },
+  {
+    "label": "Go: remove json to struct",
+    "command": "gomodifytags -file $ZED_FILE -struct $ZED_SYMBOL -remove-tags json -w",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true
+  },
+  {
+    "label": "Go: create interface mocks for tests",
+    "command": "mockery --filename=$ZED_STEM --name=$ZED_SYMBOL --output=./../tests/$ZED_STEM/mocks",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true
+  }
+]
