@@ -2,23 +2,23 @@ package order
 
 import result "go-ddd/src/common"
 
-type orderService struct {
+type OrderService interface {
+	CreateOrder(command CreateOrderCommand) result.Result[*CreateOrderResponse]
+	GetOrderById(id int64) result.Result[*OrderEntity]
+}
+
+type OrderServiceImpl struct {
 	orderRepository OrderRepository
 }
 
-type OrderService interface {
-	CreateOrder(command CreateOrderCommand) result.Result[*CreateOrderResponse]
-	GetOrderById(id int64) result.Result[*Order]
-}
-
-func (service orderService) GetOrderById(id int64) result.Result[*Order] {
+func (service OrderServiceImpl) GetOrderById(id int64) result.Result[*OrderEntity] {
 	order := service.orderRepository.GetOrderById(id)
-	return result.Result[*Order]{
+	return result.Result[*OrderEntity]{
 		Value: order,
 	}
 }
 
-func (service orderService) CreateOrder(command CreateOrderCommand) result.Result[*CreateOrderResponse] {
+func (service OrderServiceImpl) CreateOrder(command CreateOrderCommand) result.Result[*CreateOrderResponse] {
 	order := MapToOrder(command)
 	_order, err := service.orderRepository.CreateOrder(order)
 	if err != nil {
@@ -30,5 +30,5 @@ func (service orderService) CreateOrder(command CreateOrderCommand) result.Resul
 }
 
 func NewOrderService(orderRepository OrderRepository) OrderService {
-	return &orderService{orderRepository: orderRepository}
+	return &OrderServiceImpl{orderRepository: orderRepository}
 }

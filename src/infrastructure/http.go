@@ -2,7 +2,7 @@ package infrastructure
 
 import (
 	infrastructure_database "go-ddd/src/infrastructure/database"
-	"go-ddd/src/order"
+	"go-ddd/src/modules/order"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -26,7 +26,7 @@ func (s *httpServer) Run() error {
 	app.Use(recover.New())
 	app.Use(cors.New())
 
-	order.RegisterPackage(app, infrastructure_database.DB)
+	order.RegisterModule(app, infrastructure_database.DB)
 
 	return app.Listen(s.addr)
 }

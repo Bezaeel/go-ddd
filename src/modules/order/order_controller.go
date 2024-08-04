@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type orderController struct {
+type OrderController struct {
 	app          fiber.Router
 	orderService OrderService
 }
@@ -14,7 +14,7 @@ type orderController struct {
 func NewOrderController(_app *fiber.App, _orderService OrderService) {
 
 	v1 := _app.Group("/api")
-	o := &orderController{
+	o := &OrderController{
 		app:          v1,
 		orderService: _orderService,
 	}
@@ -22,7 +22,7 @@ func NewOrderController(_app *fiber.App, _orderService OrderService) {
 	o.CreateOrder()
 
 	v2 := _app.Group("/api/v2")
-	p := &orderController{
+	p := &OrderController{
 		app:          v2,
 		orderService: _orderService,
 	}
@@ -31,7 +31,7 @@ func NewOrderController(_app *fiber.App, _orderService OrderService) {
 
 }
 
-func (o *orderController) CreateOrder() fiber.Router {
+func (o *OrderController) CreateOrder() fiber.Router {
 	return o.app.Post("/orders", func(ctx *fiber.Ctx) error {
 		p := new(CreateOrderCommand)
 		_ = ctx.BodyParser(p)
@@ -42,7 +42,7 @@ func (o *orderController) CreateOrder() fiber.Router {
 	})
 }
 
-func (o *orderController) GetOrderById() fiber.Router {
+func (o *OrderController) GetOrderById() fiber.Router {
 	return o.app.Get("/orders/:id", func(ctx *fiber.Ctx) error {
 
 		orderId := ctx.Params("id")

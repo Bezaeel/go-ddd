@@ -5,13 +5,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type DI struct {
-	OrderRepository OrderRepository
-	OrderService    OrderService
-}
+// type DI struct {
+// 	OrderRepository OrderRepository
+// 	OrderService    OrderService
+// }
 
-// wire dependencies
-func RegisterPackage(app *fiber.App, db *gorm.DB) {
+// wire module dependencies
+func RegisterModule(app *fiber.App, db *gorm.DB) {
 	orderRepository := NewOrderRepository(db)
 	orderService := NewOrderService(orderRepository)
 	NewOrderController(app, orderService)

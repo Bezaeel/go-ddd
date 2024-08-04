@@ -6,7 +6,7 @@ type CreateOrderResponse struct {
 	OrderId int64
 }
 
-func MapFromEntity(order Order) *CreateOrderResponse {
+func MapFromEntity(order OrderEntity) *CreateOrderResponse {
 	return &CreateOrderResponse{
 		OrderId: order.Id,
 	}
@@ -23,19 +23,19 @@ type CreateOrderCommand struct {
 	OrderLineItems []CreateOrderLineItemCommand `json:"lineItems" validate:"required"`
 }
 
-func MapToOrder(command CreateOrderCommand) Order {
-	var items []OrderLineItem
+func MapToOrder(command CreateOrderCommand) OrderEntity {
+	var items []OrderLineItemEntity
 
 	if command.OrderLineItems != nil {
 		for _, lineItemCommand := range command.OrderLineItems {
-			items = append(items, OrderLineItem{
+			items = append(items, OrderLineItemEntity{
 				SellerId:  lineItemCommand.SellerId,
 				ProductId: lineItemCommand.ProductId,
 			})
 		}
 	}
 
-	return Order{
+	return OrderEntity{
 		IsShipped:      false,
 		CargoId:        command.CargoId,
 		ShipmentNumber: command.ShipmentNumber,
