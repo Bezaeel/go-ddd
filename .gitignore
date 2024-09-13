@@ -22,3 +22,6 @@ go.work.sum
 .env
 
 *.DS_Store
+
+# air
+tmp/

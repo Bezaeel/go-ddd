@@ -1,52 +1,36 @@
 package main
 
 import (
+	"fmt"
+	"go-ddd/src/common"
 	infra "go-ddd/src/infrastructure"
-	infrastructure_database "go-ddd/src/infrastructure/database"
-	"log"
+	"go-ddd/src/infrastructure/database"
+	"go-ddd/src/modules/order"
+	"log/slog"
 	"os"
 
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
+)
+
+var (
+	dbUser = common.EnvString("DB_USER", "")
+	dbPass = common.EnvString("DB_PASS", "")
+	dbHost = common.EnvString("DB_HOST", "")
+	dbPort = common.EnvString("DB_PORT", "")
+	dbName = common.EnvString("DB_NAME", "")
+	port   = common.EnvString("PORT", ":8000")
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(".env could not be loaded")
-	}
-	_ = godotenv.Load()
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
 
-	dbHost, exist := os.LookupEnv("DB_HOST")
+	database.ConnectToDB(dbUser, dbPass, dbHost, dbPort, dbName)
+	apiHttpServer := infra.NewAPIServer()
 
-	if !exist {
-		log.Fatal("DB_HOST not set in .env")
-	}
+	// register modules
+	order.RegisterModule(apiHttpServer.App(), database.DB)
 
-	dbPort, exist := os.LookupEnv("DB_PORT")
-
-	if !exist {
-		log.Fatal("DB_PORT not set in .env")
-	}
-
-	dbUser, exist := os.LookupEnv("DB_USER")
-
-	if !exist {
-		log.Fatal("DB_USER not set in .env")
-	}
-
-	dbPass, exist := os.LookupEnv("DB_PASS")
-
-	if !exist {
-		log.Fatal("DB_PASS not set in .env")
-	}
-
-	dbName, exist := os.LookupEnv("DB_NAME")
-
-	if !exist {
-		log.Fatal("DB_NAME not set in .env")
-	}
-
-	infrastructure_database.ConnectToDB(dbUser, dbPass, dbHost, dbPort, dbName)
-	apiServer := infra.NewAPIServer(":8000")
-	apiServer.Run()
+	logger.Info(fmt.Sprintf("starting app on port %v", port))
+	logger.Error(apiHttpServer.App().Listen(port).Error())
 }

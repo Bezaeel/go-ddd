@@ -1,4 +1,4 @@
-package infrastructure_database
+package database
 
 import (
 	"fmt"
