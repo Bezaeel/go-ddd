@@ -1,8 +1,8 @@
-package order_test
+package unit_order_tests
 
 import (
-	"go-ddd/src/order"
-	"go-ddd/tests/order/mocks"
+	"go-ddd/src/modules/order"
+	"go-ddd/tests/unit/mocks"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -27,9 +27,9 @@ func (uts *OrderServiceShould) SetupTest() {
 
 }
 
-func (uts *OrderServiceShould) TestCreateOrder() {
+func (uts *OrderServiceShould) Test_CreateOrder_ShouldCreateOrder_WhenCommandIsValid() {
 	// arrange
-	orderFixture := order.Order{
+	orderFixture := order.OrderEntity{
 		Id:             900,
 		CargoId:        201,
 		ShipmentNumber: 1001,
@@ -49,30 +49,6 @@ func (uts *OrderServiceShould) TestCreateOrder() {
 	expected := uts.sut.CreateOrder(*orderCommandFixture)
 
 	// assert
-	uts.Require().Equal(orderFixture.Id, expected.Value.OrderId)
-}
-
-func (uts *OrderServiceShould) Test3CreateOrder() {
-	// arrange
-	orderFixture := order.Order{
-		Id:             900,
-		CargoId:        201,
-		ShipmentNumber: 1001,
-		IsShipped:      false,
-	}
-
-	orderCommandFixture := &order.CreateOrderCommand{
-		CargoId:        201,
-		ShipmentNumber: 1001,
-	}
-
-	toOrder := order.MapToOrder(*orderCommandFixture)
-
-	uts.repoMock.On("CreateOrder", toOrder).Return(&orderFixture, nil)
-
-	// act
-	expected := uts.sut.CreateOrder(*orderCommandFixture)
-
-	// assert
+	uts.repoMock.AssertNumberOfCalls(uts.T(), "CreateOrder", 1)
 	uts.Require().Equal(orderFixture.Id, expected.Value.OrderId)
 }
