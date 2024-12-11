@@ -1,9 +1,9 @@
 package unit_order_tests
 
 import (
-	"go-ddd/src/modules/order"
-	"go-ddd/tests/unit/mocks"
+	"api/features/order"
 	"testing"
+	"tests/unit/order/mocks"
 
 	"github.com/stretchr/testify/suite"
 )

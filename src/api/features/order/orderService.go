@@ -1,6 +1,6 @@
 package order
 
-import result "go-ddd/src/common"
+import result "api/common"
 
 type OrderService interface {
 	CreateOrder(command CreateOrderCommand) result.Result[*CreateOrderResponse]

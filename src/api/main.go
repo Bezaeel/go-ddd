@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"go-ddd/src/common"
-	infra "go-ddd/src/infrastructure"
-	"go-ddd/src/infrastructure/database"
-	"go-ddd/src/modules/order"
 	"log/slog"
 	"os"
+
+	"api/common"
+	"api/features/order"
+
+	"infrastructure/database"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -26,9 +27,9 @@ func main() {
 	slog.SetDefault(logger)
 
 	database.ConnectToDB(dbUser, dbPass, dbHost, dbPort, dbName)
-	apiHttpServer := infra.NewAPIServer()
+	apiHttpServer := NewAPIServer()
 
-	// register modules
+	// register features
 	order.RegisterModule(apiHttpServer.App(), database.DB)
 
 	logger.Info(fmt.Sprintf("starting app on port %v", port))

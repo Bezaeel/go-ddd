@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	order "go-ddd/src/modules/order"
+	order "api/features/order"
 
 	mock "github.com/stretchr/testify/mock"
 )
